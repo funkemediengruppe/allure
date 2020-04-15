@@ -156,7 +156,6 @@ public class HistoryPlugin implements Reader, Aggregator {
         }
 
         final List<HistoryItem> newItems = Stream.concat(Stream.of(newItem), data.getItems().stream())
-                .limit(20)
                 .collect(Collectors.toList());
         result.setNewFailed(isNewFailed(newItems));
         result.setFlaky(isFlaky(newItems));
