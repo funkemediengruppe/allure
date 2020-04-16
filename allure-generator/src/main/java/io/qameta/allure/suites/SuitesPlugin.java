@@ -15,6 +15,9 @@
  */
 package io.qameta.allure.suites;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import io.qameta.allure.CommonCsvExportAggregator;
 import io.qameta.allure.CommonJsonAggregator;
 import io.qameta.allure.CompositeAggregator;
@@ -50,6 +53,8 @@ import static io.qameta.allure.tree.TreeUtils.groupByLabels;
 @SuppressWarnings("PMD.UseUtilityClass")
 public class SuitesPlugin extends CompositeAggregator {
 
+    private static final Logger LOG = LoggerFactory.getLogger(SuitesPlugin.class);
+
     private static final String SUITES = "suites";
 
     /**
@@ -71,18 +76,27 @@ public class SuitesPlugin extends CompositeAggregator {
     @SuppressWarnings("PMD.DefaultPackage")
     static /* default */ Tree<TestResult> getData(final List<LaunchResults> launchResults) {
 
+        // TODO: irgendwo hier muß die Limitierung auf 15 passieren .. adding log output for debugging
+        LOG.info("getData(): BEFORE launchResults.size() = {}", launchResults.size());
+        for (LaunchResults launchResult : launchResults) {
+            LOG.info("getData(): launchResult = {}", launchResult);
+        }
+
         // @formatter:off
         final Tree<TestResult> xunit = new TestResultTree(
                 SUITES,
             testResult -> groupByLabels(testResult, PARENT_SUITE, SUITE, SUB_SUITE)
         );
         // @formatter:on
+        LOG.info("getData(): INBETWEEN xunit.size() = {}", xunit.getChildren().size());
 
         launchResults.stream()
                 .map(LaunchResults::getResults)
                 .flatMap(Collection::stream)
                 .sorted(comparingByTimeAsc())
                 .forEach(xunit::add);
+
+        LOG.info("getData(): AFTER xunit.size() = {}", xunit.getChildren().size());
         return xunit;
     }
 

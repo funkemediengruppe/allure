@@ -15,6 +15,9 @@
  */
 package io.qameta.allure;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import io.qameta.allure.core.Configuration;
 import io.qameta.allure.core.LaunchResults;
 
@@ -29,6 +32,8 @@ import java.util.List;
  */
 public class CompositeAggregator implements Aggregator {
 
+    private static final Logger LOG = LoggerFactory.getLogger(CompositeAggregator.class);
+
     private final List<Aggregator> aggregators;
 
     public CompositeAggregator(final List<Aggregator> aggregators) {
@@ -40,6 +45,7 @@ public class CompositeAggregator implements Aggregator {
                           final List<LaunchResults> launchesResults,
                           final Path outputDirectory) throws IOException {
         for (Aggregator aggregator : aggregators) {
+            LOG.debug("aggregate(): aggregator = {}", aggregator);
             aggregator.aggregate(configuration, launchesResults, outputDirectory);
         }
     }

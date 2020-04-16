@@ -15,6 +15,9 @@
  */
 package io.qameta.allure.tree;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import io.qameta.allure.entity.LabelName;
 import io.qameta.allure.entity.Statistic;
 import io.qameta.allure.entity.TestResult;
@@ -34,6 +37,8 @@ import static java.nio.charset.StandardCharsets.UTF_8;
  */
 public final class TreeUtils {
 
+    private static final Logger LOG = LoggerFactory.getLogger(TreeUtils.class);
+
     private TreeUtils() {
         throw new IllegalStateException("Do not instance");
     }
@@ -47,6 +52,7 @@ public final class TreeUtils {
 
     public static List<TreeLayer> groupByLabels(final TestResult testResult,
                                                 final LabelName... labelNames) {
+        LOG.debug("groupByLabels(");
         return Stream.of(labelNames)
                 .map(testResult::findAllLabels)
                 .filter(strings -> !strings.isEmpty())

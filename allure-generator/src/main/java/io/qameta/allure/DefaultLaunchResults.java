@@ -61,4 +61,13 @@ public class DefaultLaunchResults implements LaunchResults {
     public <T> Optional<T> getExtra(final String name) {
         return Optional.ofNullable((T) extra.get(name));
     }
+
+    @Override
+    public String toString() {
+        return "LaunchResults{" +
+                "results=" + results +
+                ", attachments=" + attachments +
+                ", extra=" + extra +
+                '}';
+    }
 }

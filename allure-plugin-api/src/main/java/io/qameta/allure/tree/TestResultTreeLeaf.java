@@ -86,4 +86,17 @@ public class TestResultTreeLeaf extends DefaultTreeLeaf {
     public List<String> getParameters() {
         return parameters;
     }
+
+    @Override
+    public String toString() {
+        return "TestResultTreeLeaf{" +
+                "uid='" + uid + '\'' +
+                ", parentUid='" + parentUid + '\'' +
+                ", status=" + status +
+                ", time=" + time +
+                ", flaky=" + flaky +
+                ", newFailed=" + newFailed +
+                ", parameters=" + parameters +
+                '}';
+    }
 }
