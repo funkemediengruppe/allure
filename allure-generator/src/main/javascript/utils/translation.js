@@ -2,10 +2,10 @@ import i18next from 'i18next';
 import settings from './settings';
 
 export const LANGUAGES = [
+    {id: 'de', title: 'Deutsch'},
     {id: 'en', title: 'English'},
     {id: 'ru', title: 'Русский'},
     {id: 'zh', title: '中文'},
-    {id: 'de', title: 'Deutsch'},
     {id: 'he', title: 'Hebrew'},
     {id: 'br', title: 'Brazil'},
     {id: 'pl', title: 'Polski'},
@@ -25,7 +25,7 @@ export function initTranslations() {
             interpolation: {
                 escapeValue: false
             },
-            fallbackLng: 'en'
+            fallbackLng: 'de'
         }, err => err ? reject(err) : resolve());
     });
 }
