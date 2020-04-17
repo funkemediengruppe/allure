@@ -28,10 +28,12 @@ import io.qameta.allure.entity.TestResult;
 import io.qameta.allure.tree.TestResultTree;
 import io.qameta.allure.tree.TestResultTreeGroup;
 import io.qameta.allure.tree.Tree;
+import io.qameta.allure.tree.TreeGroup;
 import io.qameta.allure.tree.TreeNode;
 import io.qameta.allure.tree.TreeWidgetData;
 import io.qameta.allure.tree.TreeWidgetItem;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
@@ -90,7 +92,6 @@ public class SuitesPlugin extends CompositeAggregator {
             testResult -> groupByLabels(testResult, PARENT_SUITE, SUITE, SUB_SUITE)
         );
         // @formatter:on
-        LOG.info("getData(): INBETWEEN xunit.size() = {}", xunit.getChildren().size());
 
         launchResults.stream()
                 .map(LaunchResults::getResults)
@@ -108,15 +109,48 @@ public class SuitesPlugin extends CompositeAggregator {
 
     private static void printTree(String treeName, Tree<?> tree) {
         LOG.info("printTree({}): name = {} class = {}", treeName, tree.getName(), tree.getClass());
-        printChildren(tree.getChildren(), 0, " -");
+        printChildren(tree, tree.getChildren(), 0, " -");
     }
 
-    private static void printChildren(List<TreeNode> treeNodes, int level, String levelStr) {
+    private static void printChildren(TreeNode parent, List<TreeNode> treeNodes, int level, String levelStr) {
         if (treeNodes != null && treeNodes.size() > 0) {
+            LOG.info("treeNodes.getClass() = {}", treeNodes.getClass());
+            List<TreeNode> toBeRemoved = new ArrayList<>(3);
             for (TreeNode treeNode : treeNodes) {
-                LOG.info("{} level: {} node = {} class = {}", levelStr, level, treeNode, treeNode.getClass());
+                toBeRemoved.addAll(filterChild(parent, treeNode, level));
+                TreeGroup treeGroup = null;
+                if (treeNode instanceof TreeGroup) {
+                    treeGroup = (TreeGroup)treeNode;
+                }
+                int childCount = treeGroup == null ? 0 : treeGroup.getChildren().size();
+                LOG.info("{} level: {} name = {} childCount = {} node = {} class = {}",
+                        levelStr, level, treeNode.getName(), childCount, treeNode, treeNode.getClass());
+                if (treeGroup != null) {
+                    printChildren(treeGroup, treeGroup.getChildren(), level + 1, levelStr + " -");
+                }
+            }
+
+            // now removing those unwanted nodes
+            for (TreeNode treeNode : toBeRemoved) {
+                LOG.warn("!!! Removing node: {} name: {}", treeNode, treeNode.getName());
+                boolean removed = treeNodes.remove(treeNode);
+                if (!removed) {
+                    LOG.error("!!! FAILED removing node {} from list {}", treeNode, treeNodes);
+                }
             }
         }
+    }
+
+    private static List<TreeNode> filterChild(TreeNode parent, TreeNode child, int level) {
+        List<TreeNode> toBeRemoved = new ArrayList<>(3);
+        if (parent != null && child != null) {
+            String parentName = parent.getName();
+            String childName = child.getName();
+            if (parentName != null && parentName.equals(childName)) {
+                toBeRemoved.add(child);
+            }
+        }
+        return toBeRemoved;
     }
 
     /**

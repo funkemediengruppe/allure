@@ -173,7 +173,7 @@ public class TestResult implements Serializable, Nameable, Parameterizable, Stat
                 ", historyId='" + historyId + '\'' +
                 ", testId='" + testId + '\'' +
                 ", time=" + time +
-                ", description='" + description + '\'' +
+                //", description='" + description + '\'' +
                 //", descriptionHtml='" + descriptionHtml + '\'' +
                 ", status=" + status +
                 //", statusMessage='" + statusMessage + '\'' +
