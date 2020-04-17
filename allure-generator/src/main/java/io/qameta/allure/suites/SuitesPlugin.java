@@ -28,6 +28,7 @@ import io.qameta.allure.entity.TestResult;
 import io.qameta.allure.tree.TestResultTree;
 import io.qameta.allure.tree.TestResultTreeGroup;
 import io.qameta.allure.tree.Tree;
+import io.qameta.allure.tree.TreeNode;
 import io.qameta.allure.tree.TreeWidgetData;
 import io.qameta.allure.tree.TreeWidgetItem;
 
@@ -75,7 +76,8 @@ public class SuitesPlugin extends CompositeAggregator {
 
     @SuppressWarnings("PMD.DefaultPackage")
     static /* default */ Tree<TestResult> getData(final List<LaunchResults> launchResults) {
-
+        LOG.info("");
+        LOG.info(">>> SuitesPlugin START");
         // TODO: irgendwo hier muß die Limitierung auf 15 passieren .. adding log output for debugging
         LOG.info("getData(): BEFORE launchResults.size() = {}", launchResults.size());
         for (LaunchResults launchResult : launchResults) {
@@ -97,7 +99,24 @@ public class SuitesPlugin extends CompositeAggregator {
                 .forEach(xunit::add);
 
         LOG.info("getData(): AFTER xunit.size() = {}", xunit.getChildren().size());
+        printTree("xunit", xunit);
+
+        LOG.info(">>> SuitesPlugin END");
+        LOG.info("");
         return xunit;
+    }
+
+    private static void printTree(String treeName, Tree<?> tree) {
+        LOG.info("printTree({}): name = {} class = {}", treeName, tree.getName(), tree.getClass());
+        printChildren(tree.getChildren(), 0, " -");
+    }
+
+    private static void printChildren(List<TreeNode> treeNodes, int level, String levelStr) {
+        if (treeNodes != null && treeNodes.size() > 0) {
+            for (TreeNode treeNode : treeNodes) {
+                LOG.info("{} level: {} node = {} class = {}", levelStr, level, treeNode, treeNode.getClass());
+            }
+        }
     }
 
     /**

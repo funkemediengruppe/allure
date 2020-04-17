@@ -163,4 +163,32 @@ public class TestResult implements Serializable, Nameable, Parameterizable, Stat
         }
         return map;
     }
+
+    @Override
+    public String toString() {
+        return "TestResult{" +
+                "uid='" + uid + '\'' +
+                ", name='" + name + '\'' +
+                ", fullName='" + fullName + '\'' +
+                ", historyId='" + historyId + '\'' +
+                ", testId='" + testId + '\'' +
+                ", time=" + time +
+                ", description='" + description + '\'' +
+                //", descriptionHtml='" + descriptionHtml + '\'' +
+                ", status=" + status +
+                //", statusMessage='" + statusMessage + '\'' +
+                //", statusTrace='" + statusTrace + '\'' +
+                //", flaky=" + flaky +
+                //", newFailed=" + newFailed +
+                //", beforeStages=" + beforeStages +
+                //", testStage=" + testStage +
+                //", afterStages=" + afterStages +
+                ", labels=" + labels +
+                ", parameters=" + parameters +
+                //", links=" + links +
+                ", hidden=" + hidden +
+                //", retry=" + retry +
+                ", extra=" + extra +
+                '}';
+    }
 }
