@@ -78,12 +78,12 @@ public class SuitesPlugin extends CompositeAggregator {
 
     @SuppressWarnings("PMD.DefaultPackage")
     static /* default */ Tree<TestResult> getData(final List<LaunchResults> launchResults) {
-        LOG.info("");
-        LOG.info(">>> SuitesPlugin START");
+        LOG.debug("");
+        LOG.debug(">>> SuitesPlugin START");
         // TODO: irgendwo hier muß die Limitierung auf 15 passieren .. adding log output for debugging
-        LOG.info("getData(): BEFORE launchResults.size() = {}", launchResults.size());
+        LOG.debug("getData(): BEFORE launchResults.size() = {}", launchResults.size());
         for (LaunchResults launchResult : launchResults) {
-            LOG.info("getData(): launchResult = {}", launchResult);
+            LOG.debug("getData(): launchResult = {}", launchResult);
         }
 
         // @formatter:off
@@ -99,11 +99,11 @@ public class SuitesPlugin extends CompositeAggregator {
                 .sorted(comparingByTimeAsc())
                 .forEach(xunit::add);
 
-        LOG.info("getData(): AFTER xunit.size() = {}", xunit.getChildren().size());
-        printTree("xunit", xunit);
+        LOG.debug("getData(): AFTER xunit.size() = {}", xunit.getChildren().size());
+        //printTree("xunit", xunit);
 
-        LOG.info(">>> SuitesPlugin END");
-        LOG.info("");
+        LOG.debug(">>> SuitesPlugin END");
+        LOG.debug("");
         return xunit;
     }
 
